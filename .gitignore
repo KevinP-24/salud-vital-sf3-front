@@ -8,6 +8,11 @@
 /out-tsc
 /bazel-out
 
+# --- Angular cache ---
+.angular/cache/
+.angular/cache/**
+.angular/cache
+
 # --- Node dependencies ---
 /node_modules
 npm-debug.log*

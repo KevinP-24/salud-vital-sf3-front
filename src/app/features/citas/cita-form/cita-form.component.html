@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <h3>Agendar Nueva Cita Médica</h3>
+  <form (ngSubmit)="agendar()" #form="ngForm" class="mt-3">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">ID Paciente</label>
+        <input
+          type="text"
+          [(ngModel)]="cita.idPaciente"
+          name="idPaciente"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">ID Médico</label>
+        <input
+          type="text"
+          [(ngModel)]="cita.idMedico"
+          name="idMedico"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Fecha</label>
+        <input
+          type="date"
+          [(ngModel)]="cita.fecha"
+          name="fecha"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Hora</label>
+        <input
+          type="time"
+          [(ngModel)]="cita.hora"
+          name="hora"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-success me-2">Agendar</button>
+    <a routerLink="/citas" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>

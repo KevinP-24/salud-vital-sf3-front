@@ -1,0 +1,44 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-3">Lista de Pacientes</h2>
+
+  <div class="d-flex justify-content-end mb-3">
+    <a routerLink="/pacientes/nuevo" class="btn btn-primary">➕ Nuevo Paciente</a>
+  </div>
+
+  <div *ngIf="cargando" class="text-center">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p>Cargando...</p>
+  </div>
+
+  <table *ngIf="!cargando && pacientes.length" class="table table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Correo</th>
+        <th>Teléfono</th>
+        <th>DNI</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of pacientes">
+        <td>{{ p.id }}</td>
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.apellido }}</td>
+        <td>{{ p.correo }}</td>
+        <td>{{ p.telefono }}</td>
+        <td>{{ p.dni }}</td>
+        <td>
+          <a [routerLink]="['/pacientes/editar', p.id]" class="btn btn-sm btn-warning me-2">✏️ Editar</a>
+          <button (click)="eliminar(p.id)" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && !pacientes.length" class="alert alert-info">
+    No hay pacientes registrados.
+  </div>
+</div>
