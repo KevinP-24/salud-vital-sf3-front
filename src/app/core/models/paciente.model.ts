@@ -9,28 +9,34 @@ export interface ItemPacienteDTO {
   direccion: string;
 }
 
-
 export interface CrearPacienteDTO {
+  id: string;
   nombre: string;
   apellido: string;
-  correo: string;
+  email: string;
   telefono: string;
-  dni: string;
+  rh: string;
+  fechaNacimiento: string;
+  direccion: string;
 }
 
 export interface EditarPacienteDTO {
-  id: string; // ✅ era number
+  id: string;
   nombre: string;
   apellido: string;
-  correo: string;
+  email: string;
   telefono: string;
-  dni: string;
+  rh: string;
+  fechaNacimiento: string;
+  direccion: string;
 }
 
 export interface InformacionPacienteDTO {
-  id: string; // ✅ era number
+  id: string;
   nombreCompleto: string;
-  correo: string;
+  email: string;
   telefono: string;
-  dni: string;
+  rh: string;
+  fechaNacimiento: string;
+  direccion: string;
 }
