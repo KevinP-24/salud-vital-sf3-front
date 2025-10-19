@@ -1,32 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { CrearResultadoMedicoDTO, InformacionResultadoMedicoDTO } from '../models/resultado-medico.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class ResultadoMedicoService {
-  private apiUrl = `${environment.apiUrl}/resultados-medicos`;
+  private apiUrl = 'http://localhost:8080/api/resultados'; // ajusta según backend
 
   constructor(private http: HttpClient) {}
 
   listar(): Observable<InformacionResultadoMedicoDTO[]> {
-    return this.http.get<InformacionResultadoMedicoDTO[]>(this.apiUrl);
+    return this.http.get<InformacionResultadoMedicoDTO[]>(`${this.apiUrl}`);
   }
 
-  obtenerPorId(id: number): Observable<InformacionResultadoMedicoDTO> {
-    return this.http.get<InformacionResultadoMedicoDTO>(`${this.apiUrl}/${id}`);
+  crear(dto: CrearResultadoMedicoDTO): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, dto);
   }
 
-  crear(resultado: CrearResultadoMedicoDTO): Observable<InformacionResultadoMedicoDTO> {
-    return this.http.post<InformacionResultadoMedicoDTO>(this.apiUrl, resultado);
+  obtenerPorIdCita(idCita: string): Observable<InformacionResultadoMedicoDTO> {
+    return this.http.get<InformacionResultadoMedicoDTO>(`${this.apiUrl}/cita/${idCita}`);
   }
 
-  eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  listarPorMedico(idMedico: number): Observable<InformacionResultadoMedicoDTO[]> {
-    return this.http.get<InformacionResultadoMedicoDTO[]>(`${this.apiUrl}/medico/${idMedico}`);
+  eliminar(idCita: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${idCita}`);
   }
 }
