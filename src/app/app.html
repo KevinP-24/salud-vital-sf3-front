@@ -1,1 +1,65 @@
-<router-outlet />
+<div class="d-flex">
+  <!-- Sidebar -->
+  <nav
+    class="sidebar bg-dark text-white d-flex flex-column p-3"
+    style="width: 220px; min-height: 100vh; position: fixed;"
+  >
+    <!-- Logo -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <a class="navbar-brand text-white d-flex align-items-center" href="#">
+        <i class="bi bi-heart-pulse" style="font-size: 1.8rem; color: #dc3545;"></i>
+        <span class="ms-2 fw-bold">Vital App</span>
+      </a>
+    </div>
+
+    <!-- Pacientes -->
+    <div class="mb-3">
+      <h6 class="text-uppercase text-secondary small fw-bold">Pacientes</h6>
+      <ul class="nav flex-column">
+        <li>
+          <a class="nav-link text-white" routerLink="/pacientes" routerLinkActive="active">📋 Lista</a>
+        </li>
+        <li>
+          <a class="nav-link text-white" routerLink="/pacientes/nuevo" routerLinkActive="active">➕ Nuevo</a>
+        </li>
+        <li>
+          <a class="nav-link text-white" routerLink="/pacientes/editar/1" routerLinkActive="active">✏️ Editar (ejemplo)</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Médicos -->
+    <div class="mb-3">
+      <h6 class="text-uppercase text-secondary small fw-bold">Médicos</h6>
+      <ul class="nav flex-column">
+        <li>
+          <a class="nav-link text-white" routerLink="/medicos" routerLinkActive="active">📋 Lista</a>
+        </li>
+        <li>
+          <a class="nav-link text-white" routerLink="/medicos/nuevo" routerLinkActive="active">➕ Nuevo</a>
+        </li>
+        <li>
+          <a class="nav-link text-white" routerLink="/medicos/editar/1" routerLinkActive="active">✏️ Editar (ejemplo)</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Citas -->
+    <div class="mb-3">
+      <h6 class="text-uppercase text-secondary small fw-bold">Citas</h6>
+      <ul class="nav flex-column">
+        <li>
+          <a class="nav-link text-white" routerLink="/citas" routerLinkActive="active">📋 Lista</a>
+        </li>
+        <li>
+          <a class="nav-link text-white" routerLink="/citas/nueva" routerLinkActive="active">➕ Nueva</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main class="flex-grow-1 p-3" style="margin-left: 220px; min-height: 100vh;">
+    <router-outlet></router-outlet>
+  </main>
+</div>

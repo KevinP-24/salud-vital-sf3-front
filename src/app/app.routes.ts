@@ -8,12 +8,17 @@ import { CitaFormComponent } from './features/citas/cita-form/cita-form.componen
 
 export const routes: Routes = [
   { path: '', redirectTo: 'pacientes', pathMatch: 'full' },
+
   { path: 'pacientes', component: PacienteListComponent },
   { path: 'pacientes/nuevo', component: PacienteFormComponent },
   { path: 'pacientes/editar/:id', component: PacienteFormComponent },
+
   { path: 'medicos', component: MedicoListComponent },
   { path: 'medicos/nuevo', component: MedicoFormComponent },
   { path: 'medicos/editar/:id', component: MedicoFormComponent },
+
   { path: 'citas', component: CitaListComponent },
   { path: 'citas/nueva', component: CitaFormComponent },
+
+  { path: '**', redirectTo: 'pacientes' }
 ];

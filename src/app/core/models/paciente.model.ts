@@ -1,11 +1,14 @@
 export interface ItemPacienteDTO {
-  id: string; // ✅ era number
+  id: string;
   nombre: string;
   apellido: string;
-  correo: string;
+  email: string;
   telefono: string;
-  dni: string;
+  rh: string;
+  fechaNacimiento: string;
+  direccion: string;
 }
+
 
 export interface CrearPacienteDTO {
   nombre: string;

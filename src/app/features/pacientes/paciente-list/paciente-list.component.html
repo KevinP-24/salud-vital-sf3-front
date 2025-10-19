@@ -13,12 +13,14 @@
   <table *ngIf="!cargando && pacientes.length" class="table table-hover">
     <thead class="table-light">
       <tr>
-        <th>ID</th>
+        <th>Cédula</th>
         <th>Nombre</th>
         <th>Apellido</th>
-        <th>Correo</th>
+        <th>Email</th>
         <th>Teléfono</th>
-        <th>DNI</th>
+        <th>RH</th>
+        <th>Fecha de Nacimiento</th>
+        <th>Dirección</th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -27,9 +29,11 @@
         <td>{{ p.id }}</td>
         <td>{{ p.nombre }}</td>
         <td>{{ p.apellido }}</td>
-        <td>{{ p.correo }}</td>
+        <td>{{ p.email }}</td>
         <td>{{ p.telefono }}</td>
-        <td>{{ p.dni }}</td>
+        <td>{{ p.rh }}</td>
+        <td>{{ p.fechaNacimiento }}</td>
+        <td>{{ p.direccion }}</td>
         <td>
           <a [routerLink]="['/pacientes/editar', p.id]" class="btn btn-sm btn-warning me-2">✏️ Editar</a>
           <button (click)="eliminar(p.id)" class="btn btn-sm btn-danger">🗑️ Eliminar</button>
