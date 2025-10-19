@@ -1,0 +1,27 @@
+<div class="container mt-4">
+  <h2>Médicos</h2>
+  <a routerLink="/medicos/nuevo" class="btn btn-primary mb-3">➕ Nuevo Médico</a>
+
+  <div *ngIf="cargando" class="text-center">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <table *ngIf="!cargando" class="table table-hover table-striped">
+    <thead class="table-light">
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Especialidad</th>
+        <th>Correo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of medicos">
+        <td>{{ m.nombre }}</td>
+        <td>{{ m.apellido }}</td>
+        <td>{{ m.especialidad }}</td>
+        <td>{{ m.correo }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

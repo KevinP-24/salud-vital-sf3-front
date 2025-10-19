@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h3 class="mb-3">Citas Médicas</h3>
+  <a routerLink="/citas/nueva" class="btn btn-primary mb-3">➕ Agendar Cita</a>
+
+  <div *ngIf="cargando" class="text-center">
+    <div class="spinner-border text-primary"></div>
+    <p>Cargando citas...</p>
+  </div>
+
+  <table *ngIf="!cargando && citas.length" class="table table-striped">
+    <thead class="table-light">
+      <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Estado</th>
+        <th>Médico</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of citas">
+        <td>{{ c.fecha }}</td>
+        <td>{{ c.hora }}</td>
+        <td>{{ c.estado }}</td>
+        <td>{{ c.idMedico }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!cargando && !citas.length" class="alert alert-info">
+    No hay citas registradas para este paciente.
+  </div>
+</div>
