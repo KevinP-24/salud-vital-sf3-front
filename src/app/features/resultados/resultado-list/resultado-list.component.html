@@ -1,0 +1,29 @@
+<div class="container mt-3">
+  <h3>Resultados Médicos</h3>
+
+  <div *ngIf="cargando" class="text-center py-3">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <table *ngIf="!cargando" class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID Cita Médica</th>
+        <th>Diagnóstico</th>
+        <th>Fecha Registro</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of resultados">
+        <td>{{ r.idCitaMedica }}</td>
+        <td>{{ r.diagnostico }}</td>
+        <td>{{ r.fechaRegistro | date: 'short' }}</td>
+        <td>
+          <a class="btn btn-sm btn-primary me-2" [routerLink]="['/resultados', r.idCitaMedica]">Ver</a>
+          <button class="btn btn-sm btn-danger" (click)="eliminar(r.idCitaMedica)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

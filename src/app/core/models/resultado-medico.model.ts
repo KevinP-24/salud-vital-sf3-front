@@ -1,17 +1,16 @@
-import { ItemMedicoDTO } from './medico.model';
-import { ItemCitaMedicaDTO } from './cita-medica.model';
-
+// src/app/models/resultado-medico.model.ts
 export interface CrearResultadoMedicoDTO {
-  idCita: number;
+  idCitaMedica: string;
   descripcion: string;
-  observaciones: string;
+  diagnostico: string;
+  recomendaciones: string;
+  fechaRegistro: string; // Formato "dd/MM/yyyy HH:mm"
 }
 
 export interface InformacionResultadoMedicoDTO {
-  id: number;
+  idCitaMedica: string;
   descripcion: string;
-  observaciones: string;
-  fecha: string;
-  medico: ItemMedicoDTO;
-  cita: ItemCitaMedicaDTO;
+  diagnostico: string;
+  recomendaciones: string;
+  fechaRegistro: string;
 }

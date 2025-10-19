@@ -1,0 +1,32 @@
+<div class="container mt-3">
+  <h3>Nuevo Resultado Médico</h3>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="mb-3">
+      <label>ID Cita Médica</label>
+      <input type="text" formControlName="idCitaMedica" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label>Descripción</label>
+      <textarea formControlName="descripcion" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label>Diagnóstico</label>
+      <input type="text" formControlName="diagnostico" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+      <label>Recomendaciones</label>
+      <textarea formControlName="recomendaciones" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label>Fecha Registro</label>
+      <input type="datetime-local" formControlName="fechaRegistro" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Guardar</button>
+  </form>
+</div>
