@@ -2,6 +2,23 @@
   <h3>{{ modoEdicion ? 'Editar Médico' : 'Registrar Nuevo Médico' }}</h3>
 
   <form (ngSubmit)="guardar()" #form="ngForm" class="mt-3">
+
+    <!-- 🔹 Campo Cédula -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Cédula</label>
+        <input
+          type="text"
+          [(ngModel)]="medico.id"
+          name="id"
+          class="form-control"
+          required
+          [readonly]="modoEdicion"
+        />
+      </div>
+    </div>
+
+    <!-- 🔹 Nombre y Apellido -->
     <div class="row mb-3">
       <div class="col-md-6">
         <label class="form-label">Nombre</label>
@@ -25,6 +42,7 @@
       </div>
     </div>
 
+    <!-- 🔹 Especialidad y Correo -->
     <div class="row mb-3">
       <div class="col-md-6">
         <label class="form-label">Especialidad</label>
@@ -39,7 +57,7 @@
       <div class="col-md-6">
         <label class="form-label">Correo electrónico</label>
         <input
-          type="email"
+          type="correo"
           [(ngModel)]="medico.correo"
           name="correo"
           class="form-control"
@@ -48,6 +66,25 @@
       </div>
     </div>
 
+    <!-- 🔹 Jornada -->
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Jornada</label>
+        <select
+          [(ngModel)]="medico.jornadaMedico"
+          name="jornadaMedico"
+          class="form-select"
+          required
+        >
+          <option value="" disabled>Seleccione una jornada</option>
+          <option *ngFor="let j of jornadas" [value]="j">
+            {{ j.replace('_', ' ') }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 🔹 Botones -->
     <button type="submit" class="btn btn-success me-2">
       {{ modoEdicion ? 'Guardar cambios' : 'Registrar' }}
     </button>
