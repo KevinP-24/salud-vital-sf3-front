@@ -1,32 +1,47 @@
 <div class="container mt-4">
-  <h3 class="mb-3">Citas Médicas</h3>
-  <a routerLink="/citas/nueva" class="btn btn-primary mb-3">➕ Agendar Cita</a>
+  <h3>Lista de Citas Médicas</h3>
+
+  <div class="d-flex justify-content-end mb-3">
+    <a routerLink="/citas/nueva" class="btn btn-primary">➕ Nueva Cita</a>
+  </div>
 
   <div *ngIf="cargando" class="text-center">
-    <div class="spinner-border text-primary"></div>
     <p>Cargando citas...</p>
   </div>
 
-  <table *ngIf="!cargando && citas.length" class="table table-striped">
-    <thead class="table-light">
+  <table class="table table-striped" *ngIf="!cargando && citas.length > 0">
+    <thead>
       <tr>
-        <th>Fecha</th>
-        <th>Hora</th>
+        <th>ID</th>
+        <th>Paciente ID</th>
+        <th>Médico ID</th>
+        <th>Fecha Cita</th>
+        <th>Motivo</th>
         <th>Estado</th>
-        <th>Médico</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let c of citas">
-        <td>{{ c.fecha }}</td>
-        <td>{{ c.hora }}</td>
+        <td>{{ c.id }}</td>
+        <td>{{ c.paciente_id }}</td>
+        <td>{{ c.medico_id }}</td>
+        <td>{{ c.fecha_cita | date: 'short' }}</td>
+        <td>{{ c.motivo }}</td>
         <td>{{ c.estado }}</td>
-        <td>{{ c.idMedico }}</td>
+        <td>
+          <a [routerLink]="['/citas/editar', c.id]" class="btn btn-sm btn-warning me-2">
+            ✏️ Editar
+          </a>
+          <button class="btn btn-sm btn-danger" (click)="eliminarCita(c.id)">
+            🗑️ Eliminar
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
 
-  <div *ngIf="!cargando && !citas.length" class="alert alert-info">
-    No hay citas registradas para este paciente.
+  <div *ngIf="!cargando && citas.length === 0" class="text-center mt-4">
+    <p>No hay citas registradas.</p>
   </div>
 </div>

@@ -1,29 +1,30 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CrearResultadoMedicoDTO, InformacionResultadoMedicoDTO } from '../models/resultado-medico.model';
+import {
+  CrearResultadoDTO,
+  ItemResultadoDTO
+} from '../models/resultado-medico.model';
+import { environment } from '../../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ResultadoMedicoService {
-  private apiUrl = 'http://localhost:8080/api/resultados'; // ajusta según backend
+  private apiUrl = `${environment.apiUrl}/resultados`;
 
   constructor(private http: HttpClient) {}
 
-  listar(): Observable<InformacionResultadoMedicoDTO[]> {
-    return this.http.get<InformacionResultadoMedicoDTO[]>(`${this.apiUrl}`);
+  /** 🔹 Obtener todos los resultados médicos */
+  listar(): Observable<ItemResultadoDTO[]> {
+    return this.http.get<ItemResultadoDTO[]>(this.apiUrl);
   }
 
-  crear(dto: CrearResultadoMedicoDTO): Observable<any> {
-    return this.http.post(`${this.apiUrl}`, dto);
+  /** 🔹 Obtener resultados por cita */
+  obtenerPorCita(citaId: number | string): Observable<ItemResultadoDTO[]> {
+    return this.http.get<ItemResultadoDTO[]>(`${this.apiUrl}/${citaId}`);
   }
 
-  obtenerPorIdCita(idCita: string): Observable<InformacionResultadoMedicoDTO> {
-    return this.http.get<InformacionResultadoMedicoDTO>(`${this.apiUrl}/cita/${idCita}`);
-  }
-
-  eliminar(idCita: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${idCita}`);
+  /** 🔹 Crear un nuevo resultado médico */
+  crear(dto: CrearResultadoDTO): Observable<ItemResultadoDTO> {
+    return this.http.post<ItemResultadoDTO>(this.apiUrl, dto);
   }
 }

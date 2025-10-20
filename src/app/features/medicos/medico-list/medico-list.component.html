@@ -1,29 +1,50 @@
 <div class="container mt-4">
-  <h2>Médicos</h2>
-  <a routerLink="/medicos/nuevo" class="btn btn-primary mb-3">➕ Nuevo Médico</a>
+  <h3>Lista de Médicos</h3>
 
-  <div *ngIf="cargando" class="text-center">
-    <div class="spinner-border text-primary"></div>
+  <div class="d-flex justify-content-end mb-3">
+    <a routerLink="/medicos/nuevo" class="btn btn-primary">➕ Nuevo Médico</a>
   </div>
 
-  <table *ngIf="!cargando" class="table table-hover table-striped">
-    <thead class="table-light">
+  <div *ngIf="cargando" class="text-center">
+    <p>Cargando médicos...</p>
+  </div>
+
+  <table class="table table-striped" *ngIf="!cargando && medicos.length > 0">
+    <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Apellido</th>
+        <th>ID</th>
+        <th>Usuario ID</th>
         <th>Especialidad</th>
-        <th>Correo</th>
-        <th>Jornada</th> 
+        <th>Número Licencia</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let m of medicos">
-        <td>{{ m.nombre }}</td>
-        <td>{{ m.apellido }}</td>
+        <td>{{ m.id }}</td>
+        <td>{{ m.usuario_id }}</td>
         <td>{{ m.especialidad }}</td>
-        <td>{{ m.correo }}</td>
-        <td>{{ m.jornadaMedico.replace('_', ' ') }}</td>
+        <td>{{ m.numero_licencia }}</td>
+        <td>{{ m.telefono }}</td>
+        <td>
+          <a
+            [routerLink]="['/medicos/editar', m.id]"
+            class="btn btn-sm btn-warning me-2"
+            >✏️ Editar</a
+          >
+          <button
+            class="btn btn-sm btn-danger"
+            (click)="eliminarMedico(m.id)"
+          >
+            🗑️ Eliminar
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="!cargando && medicos.length === 0" class="text-center mt-4">
+    <p>No hay médicos registrados.</p>
+  </div>
 </div>

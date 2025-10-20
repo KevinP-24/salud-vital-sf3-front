@@ -6,7 +6,7 @@ import { MedicoService } from '../../../../app/core/services/medico.service';
 import {
   CrearMedicoDTO,
   EditarMedicoDTO,
-  InformacionMedicoDTO,
+  InformacionMedicoDTO
 } from '../../../../app/core/models/medico.model';
 
 @Component({
@@ -16,20 +16,23 @@ import {
   templateUrl: './medico-form.component.html',
 })
 export class MedicoFormComponent implements OnInit {
+  modoEdicion = false;
+  idMedico?: number;
+
   medico: CrearMedicoDTO = {
-    id: '',
-    nombre: '',
-    apellido: '',
+    usuario_id: 0,
     especialidad: '',
-    correo: '',
-    jornadaMedico: '',
+    numero_licencia: '',
+    telefono: ''
   };
 
-  modoEdicion = false;
-  idMedico?: string;
-
-
-  jornadas: string[] = ['HORARIO_1', 'HORARIO_2', 'HORARIO_3'];
+  especialidades: string[] = [
+    'Cardiología',
+    'Pediatría',
+    'Dermatología',
+    'Ginecología',
+    'Medicina General'
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -38,54 +41,62 @@ export class MedicoFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.idMedico = this.route.snapshot.paramMap.get('id') || undefined;
-
-    if (this.idMedico) {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      this.idMedico = Number(idParam);
       this.modoEdicion = true;
-
-      this.medicoService.obtenerPorId(this.idMedico).subscribe({
-        next: (data: InformacionMedicoDTO) => {
-          const [nombre, apellido = ''] = data.nombreCompleto.split(' ');
-
-          this.medico = {
-            id: data.id,
-            nombre,
-            apellido,
-            especialidad: data.especialidad,
-            correo: data.correo ?? '',
-            jornadaMedico: data.jornadaMedico ?? '',
-          };
-        },
-        error: (err) => console.error('Error cargando médico', err),
-      });
+      this.cargarMedico();
     }
   }
 
+  cargarMedico(): void {
+    if (!this.idMedico) return;
+    this.medicoService.obtenerPorId(this.idMedico).subscribe({
+      next: (data: InformacionMedicoDTO) => {
+        this.medico = {
+          usuario_id: data.usuario_id,
+          especialidad: data.especialidad,
+          numero_licencia: data.numero_licencia,
+          telefono: data.telefono
+        };
+      },
+      error: (err) => console.error('❌ Error cargando médico:', err)
+    });
+  }
+
   guardar(): void {
-    if (!this.medico.id?.trim()) {
-      alert('La cédula es obligatoria');
+    if (!this.medico.usuario_id) {
+      alert('El usuario_id es obligatorio');
       return;
     }
 
     if (this.modoEdicion && this.idMedico) {
       const dto: EditarMedicoDTO = {
-        ...this.medico,
+        especialidad: this.medico.especialidad,
+        numero_licencia: this.medico.numero_licencia,
+        telefono: this.medico.telefono
       };
 
-      this.medicoService.editar(dto).subscribe({
+      this.medicoService.editar(this.idMedico, dto).subscribe({
         next: () => {
-          alert('✅ Médico editado exitosamente');
+          alert('✅ Médico actualizado correctamente');
           this.router.navigate(['/medicos']);
         },
-        error: () => alert('Error al editar médico'),
+        error: (err) => {
+          console.error('❌ Error al actualizar médico:', err);
+          alert('Error al actualizar médico');
+        }
       });
     } else {
       this.medicoService.crear(this.medico).subscribe({
         next: () => {
-          alert('Médico creado exitosamente');
+          alert('✅ Médico creado correctamente');
           this.router.navigate(['/medicos']);
         },
-        error: () => alert('Error al crear médico'),
+        error: (err) => {
+          console.error('❌ Error al crear médico:', err);
+          alert('Error al crear médico');
+        }
       });
     }
   }
