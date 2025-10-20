@@ -30,6 +30,7 @@ export class MedicoFormComponent implements OnInit {
 
 
   jornadas: string[] = ['HORARIO_1', 'HORARIO_2', 'HORARIO_3'];
+  especialidades: string[] = ['GINECOLOGO', 'PEDIATRA', 'DERMATOLOGO', 'CARDIOLOGO', 'GENERAL'];
 
   constructor(
     private route: ActivatedRoute,
@@ -62,6 +63,7 @@ export class MedicoFormComponent implements OnInit {
   }
 
   guardar(): void {
+     console.log('DTO a enviar:', this.medico);
     if (!this.medico.id?.trim()) {
       alert('La cédula es obligatoria');
       return;

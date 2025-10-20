@@ -7,12 +7,18 @@ export interface ItemCitaMedicaDTO {
   estado: string;
 }
 
+export interface ItemHorarioDTO {
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
+}
+
 export interface CrearCitaMedicaDTO {
   idPaciente: string;
   idMedico: string;
-  fecha: string;
-  hora: string;
+  horario: ItemHorarioDTO;
 }
+
 
 export interface CrearResultadoMedicoDTO {
   descripcion: string;
