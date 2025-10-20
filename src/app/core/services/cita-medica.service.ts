@@ -1,64 +1,71 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+
+// ✅ Modelos de Citas
 import {
-  ItemCitaMedicaDTO,
-  CrearCitaMedicaDTO,
-  InformacionResultadoMedicoDTO,
-  CrearResultadoMedicoDTO
+  ItemCitaDTO,
+  CrearCitaDTO,
+  EditarCitaEstadoDTO,
+  InformacionCitaDTO
 } from '../models/cita-medica.model';
 
-interface MensajeDTO<T> {
-  error: boolean;
-  respuesta: T;
-}
+// ✅ Modelos de Resultados Médicos
+import {
+  ItemResultadoDTO,
+  CrearResultadoDTO
+} from '../models/resultado-medico.model';
 
 @Injectable({ providedIn: 'root' })
 export class CitaMedicaService {
-  private apiUrl = `${environment.apiUrl}/citaMedica`;
+  private apiUrl = `${environment.apiUrl}/citas`;
+  private resultadosUrl = `${environment.apiUrl}/resultados`;
 
   constructor(private http: HttpClient) {}
 
-  // ✅ Agendar nueva cita
-  agendar(cita: CrearCitaMedicaDTO): Observable<string> {
-    return this.http
-      .post<MensajeDTO<string>>(`${this.apiUrl}/agendar`, cita)
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Listar todas las citas */
+  listar(): Observable<ItemCitaDTO[]> {
+    return this.http.get<ItemCitaDTO[]>(this.apiUrl);
   }
 
-  // ✅ Cancelar una cita
-  cancelar(id: string): Observable<string> {
-    return this.http
-      .put<MensajeDTO<string>>(`${this.apiUrl}/cancelar/${id}`, {})
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Obtener una cita por ID */
+  obtenerPorId(id: number | string): Observable<InformacionCitaDTO> {
+    return this.http.get<InformacionCitaDTO>(`${this.apiUrl}/${id}`);
   }
 
-  // ✅ Listar citas por paciente
-  listarPorPaciente(idPaciente: string): Observable<ItemCitaMedicaDTO[]> {
-    return this.http
-      .get<MensajeDTO<ItemCitaMedicaDTO[]>>(`${this.apiUrl}/listar/paciente/${idPaciente}`)
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Crear nueva cita */
+  crear(cita: CrearCitaDTO): Observable<ItemCitaDTO> {
+    return this.http.post<ItemCitaDTO>(this.apiUrl, cita);
   }
 
-  // ✅ Listar citas por médico
-  listarPorMedico(idMedico: string): Observable<ItemCitaMedicaDTO[]> {
-    return this.http
-      .get<MensajeDTO<ItemCitaMedicaDTO[]>>(`${this.apiUrl}/listar/medico/${idMedico}`)
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Actualizar estado de una cita */
+  actualizarEstado(id: number | string, estado: string): Observable<ItemCitaDTO> {
+    const body: EditarCitaEstadoDTO = { estado };
+    return this.http.put<ItemCitaDTO>(`${this.apiUrl}/${id}`, body);
   }
 
-  // ✅ Agregar resultado médico
-  agregarResultado(idCita: string, dto: CrearResultadoMedicoDTO): Observable<string> {
-    return this.http
-      .post<MensajeDTO<string>>(`${this.apiUrl}/resultado/${idCita}`, dto)
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Eliminar una cita */
+  eliminar(id: number | string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  // ✅ Obtener resultado médico
-  obtenerResultado(idCita: string): Observable<InformacionResultadoMedicoDTO> {
-    return this.http
-      .get<MensajeDTO<InformacionResultadoMedicoDTO>>(`${this.apiUrl}/resultado/${idCita}`)
-      .pipe(map((res) => res.respuesta));
+  // -------------------------------
+  // RESULTADOS MÉDICOS
+  // -------------------------------
+
+  /** 🔹 Listar todos los resultados médicos */
+  listarResultados(): Observable<ItemResultadoDTO[]> {
+    return this.http.get<ItemResultadoDTO[]>(this.resultadosUrl);
+  }
+
+  /** 🔹 Obtener resultados de una cita */
+  obtenerResultadoPorCita(citaId: number | string): Observable<ItemResultadoDTO[]> {
+    return this.http.get<ItemResultadoDTO[]>(`${this.resultadosUrl}/${citaId}`);
+  }
+
+  /** 🔹 Crear nuevo resultado médico */
+  crearResultado(dto: CrearResultadoDTO): Observable<ItemResultadoDTO> {
+    return this.http.post<ItemResultadoDTO>(this.resultadosUrl, dto);
   }
 }

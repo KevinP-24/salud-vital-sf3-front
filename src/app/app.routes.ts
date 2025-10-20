@@ -1,5 +1,9 @@
 import { Routes } from '@angular/router';
 
+// Usuarios
+import { UsuarioListComponent } from './features/usuarios/usuario-list/usuario-list.component';
+import { UsuarioFormComponent } from './features/usuarios/usuario-form/usuario-form.component';
+
 // Pacientes
 import { PacienteListComponent } from './features/pacientes/paciente-list/paciente-list.component';
 import { PacienteFormComponent } from './features/pacientes/paciente-form/paciente-form.component';
@@ -17,26 +21,32 @@ import { ResultadoListComponent } from './features/resultados/resultado-list/res
 import { ResultadoFormComponent } from './features/resultados/resultado-form/resultado-form.component';
 
 export const routes: Routes = [
+  // Default
   { path: '', redirectTo: 'pacientes', pathMatch: 'full' },
 
-  // 🧍‍♂️ Pacientes
+  // Usuarios
+  { path: 'usuarios', component: UsuarioListComponent },
+  { path: 'usuarios/nuevo', component: UsuarioFormComponent },
+  { path: 'usuarios/editar/:id', component: UsuarioFormComponent },
+
+  // Pacientes
   { path: 'pacientes', component: PacienteListComponent },
   { path: 'pacientes/nuevo', component: PacienteFormComponent },
   { path: 'pacientes/editar/:id', component: PacienteFormComponent },
 
-  // 🩺 Médicos
+  // Médicos
   { path: 'medicos', component: MedicoListComponent },
   { path: 'medicos/nuevo', component: MedicoFormComponent },
   { path: 'medicos/editar/:id', component: MedicoFormComponent },
 
-  // 📅 Citas
+  // Citas
   { path: 'citas', component: CitaListComponent },
   { path: 'citas/nueva', component: CitaFormComponent },
 
-  // 🧾 Resultados Médicos
+  // Resultados Médicos
   { path: 'resultados', component: ResultadoListComponent },
   { path: 'resultados/nuevo', component: ResultadoFormComponent },
 
-  // 🔁 Default
+  // Fallback
   { path: '**', redirectTo: 'pacientes' }
 ];

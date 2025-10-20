@@ -1,32 +1,30 @@
-export interface ItemCitaMedicaDTO {
-  id: string;
-  idPaciente: string;
-  idMedico: string;
-  fecha: string;
-  hora: string;
+// src/app/core/models/cita.model.ts
+
+export interface ItemCitaDTO {
+  id: number;
+  paciente_id: number;
+  medico_id: number;
+  fecha_cita: string;   // formato ISO o 'YYYY-MM-DD HH:mm'
+  motivo: string;
   estado: string;
 }
 
-export interface ItemHorarioDTO {
-  fecha: string;
-  horaInicio: string;
-  horaFin: string;
+export interface CrearCitaDTO {
+  paciente_id: number;
+  medico_id: number;
+  fecha_cita: string;   // formato 'YYYY-MM-DD HH:mm'
+  motivo: string;
 }
 
-export interface CrearCitaMedicaDTO {
-  idPaciente: string;
-  idMedico: string;
-  horario: ItemHorarioDTO;
+export interface EditarCitaEstadoDTO {
+  estado: string;
 }
 
-
-export interface CrearResultadoMedicoDTO {
-  descripcion: string;
-  recomendaciones: string;
-}
-
-export interface InformacionResultadoMedicoDTO {
-  descripcion: string;
-  recomendaciones: string;
-  fechaRegistro: string;
+export interface InformacionCitaDTO {
+  id: number;
+  paciente_id: number;
+  medico_id: number;
+  fecha_cita: string;
+  motivo: string;
+  estado: string;
 }

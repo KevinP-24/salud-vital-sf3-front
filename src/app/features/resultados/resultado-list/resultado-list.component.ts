@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ResultadoMedicoService } from '../../../core/services/resultado-medico.service';
-import { InformacionResultadoMedicoDTO } from '../../../core/models/resultado-medico.model';
+import { ItemResultadoDTO } from '../../../core/models/resultado-medico.model';
 
 @Component({
   selector: 'app-resultado-list',
@@ -11,7 +11,7 @@ import { InformacionResultadoMedicoDTO } from '../../../core/models/resultado-me
   templateUrl: './resultado-list.component.html',
 })
 export class ResultadoListComponent implements OnInit {
-  resultados: InformacionResultadoMedicoDTO[] = [];
+  resultados: ItemResultadoDTO[] = [];
   cargando = true;
 
   constructor(private resultadoService: ResultadoMedicoService) {}
@@ -20,6 +20,7 @@ export class ResultadoListComponent implements OnInit {
     this.cargarResultados();
   }
 
+  /** 🔹 Obtener todos los resultados */
   cargarResultados(): void {
     this.resultadoService.listar().subscribe({
       next: (data) => {
@@ -27,15 +28,9 @@ export class ResultadoListComponent implements OnInit {
         this.cargando = false;
       },
       error: (err) => {
-        console.error('Error cargando resultados médicos', err);
+        console.error('❌ Error cargando resultados médicos:', err);
         this.cargando = false;
       },
     });
-  }
-
-  eliminar(idCita: string): void {
-    if (confirm('¿Deseas eliminar este resultado médico?')) {
-      this.resultadoService.eliminar(idCita).subscribe(() => this.cargarResultados());
-    }
   }
 }

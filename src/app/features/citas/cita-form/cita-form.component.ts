@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CitaMedicaService } from '../../../../app/core/services/cita-medica.service';
 import { MedicoService } from '../../../../app/core/services/medico.service';
-import { CrearCitaMedicaDTO } from '../../../../app/core/models/cita-medica.model';
+import { CrearCitaDTO } from '../../../../app/core/models/cita-medica.model';
 import { ItemMedicoDTO } from '../../../../app/core/models/medico.model';
+
 @Component({
   selector: 'app-cita-form',
   standalone: true,
@@ -13,60 +14,74 @@ import { ItemMedicoDTO } from '../../../../app/core/models/medico.model';
   templateUrl: './cita-form.component.html',
 })
 export class CitaFormComponent implements OnInit {
-cita: CrearCitaMedicaDTO = {
-  idPaciente: '',
-  idMedico: '',
-  horario: {
-    fecha: '',
-    horaInicio: '',
-    horaFin: '',
-  },
-};
+  cita: CrearCitaDTO = {
+    paciente_id: 0,
+    medico_id: 0,
+    fecha_cita: '',
+    motivo: ''
+  };
 
-  especialidades: string[] = ['GINECOLOGO', 'PEDIATRA', 'DERMATOLOGO', 'CARDIOLOGO', 'GENERAL'];
-  especialidadSeleccionada: string = '';
-  medicosFiltrados: ItemMedicoDTO[] = [];
+  especialidades: string[] = [
+    'Cardiología',
+    'Pediatría',
+    'Dermatología',
+    'Ginecología',
+    'Medicina General'
+  ];
+
+  especialidadSeleccionada = '';
   todosMedicos: ItemMedicoDTO[] = [];
+  medicosFiltrados: ItemMedicoDTO[] = [];
 
-  constructor(private citaService: CitaMedicaService,
-              private medicoService: MedicoService,
-              private router: Router) {}
+  constructor(
+    private citaService: CitaMedicaService,
+    private medicoService: MedicoService,
+    private router: Router
+  ) {}
 
-ngOnInit(): void {
-  this.medicoService.listar().subscribe({
-    next: (data) => {
-      // Aseguramos que todos tengan "id"
-      this.todosMedicos = data.map((m: any) => ({
-        ...m,
-        id: m.id || m._id, // si viene como "_id" lo copiamos a "id"
-      }));
-    },
-    error: (err) => console.error('Error cargando médicos', err),
-  });
-}
+  ngOnInit(): void {
+    this.cargarMedicos();
+  }
 
+  /** 🔹 Obtener todos los médicos */
+  cargarMedicos(): void {
+    this.medicoService.listar().subscribe({
+      next: (data) => {
+        this.todosMedicos = data;
+      },
+      error: (err) => console.error('❌ Error cargando médicos:', err),
+    });
+  }
 
+  /** 🔹 Filtrar médicos por especialidad seleccionada */
   cargarMedicosPorEspecialidad(): void {
     if (!this.especialidadSeleccionada) {
       this.medicosFiltrados = [];
       return;
     }
+
     this.medicosFiltrados = this.todosMedicos.filter(
-      m => m.especialidad === this.especialidadSeleccionada
+      (m) => m.especialidad === this.especialidadSeleccionada
     );
-    // Limpiar selección anterior de médico
-    this.cita.idMedico = '';
+
+    // Limpiar selección anterior
+    this.cita.medico_id = 0;
   }
 
+  /** 🔹 Enviar cita al backend */
   agendar(): void {
-    console.log('Cita a enviar:', this.cita);
-    this.citaService.agendar(this.cita).subscribe({
+    if (!this.cita.paciente_id || !this.cita.medico_id || !this.cita.fecha_cita || !this.cita.motivo) {
+      alert('Por favor completa todos los campos.');
+      return;
+    }
+
+    this.citaService.crear(this.cita).subscribe({
       next: () => {
-        alert('Cita agendada exitosamente');
+        alert('✅ Cita agendada exitosamente');
         this.router.navigate(['/citas']);
       },
       error: (err) => {
-        console.error('Error al agendar cita', err);
+        console.error('❌ Error al agendar cita:', err);
         alert('Error al agendar la cita');
       },
     });

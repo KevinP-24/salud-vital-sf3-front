@@ -1,39 +1,28 @@
-import { ItemHorarioDTO } from './horario.model';
-
 export interface ItemMedicoDTO {
-  id: string;
-  nombre: string;
-  apellido: string;
+  id: number;
+  usuario_id: number;
   especialidad: string;
-  correo: string;
-  jornadaMedico: string;
+  numero_licencia: string;
+  telefono: string;
 }
 
 export interface CrearMedicoDTO {
-  id: string;
-  nombre: string;
-  apellido: string;
+  usuario_id: number;          // Relación con la tabla usuarios
   especialidad: string;
-  correo: string;
-  jornadaMedico: string;
+  numero_licencia: string;
+  telefono: string;
 }
 
 export interface EditarMedicoDTO {
-  id: string;
-  nombre: string;
-  apellido: string;
-  especialidad: string;
-  correo: string;
-  jornadaMedico: string;
+  especialidad?: string;
+  numero_licencia?: string;
+  telefono?: string;
 }
 
 export interface InformacionMedicoDTO {
-  id: string;
-  nombreCompleto: string;
+  id: number;
+  usuario_id: number;
   especialidad: string;
-  horarios: ItemHorarioDTO[];
-  correo?: string;
-  jornadaMedico?: string;
+  numero_licencia: string;
+  telefono: string;
 }
-
-
