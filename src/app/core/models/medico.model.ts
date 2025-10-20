@@ -6,13 +6,16 @@ export interface ItemMedicoDTO {
   apellido: string;
   especialidad: string;
   correo: string;
+  jornadaMedico: string;
 }
 
 export interface CrearMedicoDTO {
+  id: string;
   nombre: string;
   apellido: string;
   especialidad: string;
   correo: string;
+  jornadaMedico: string;
 }
 
 export interface EditarMedicoDTO {
@@ -21,6 +24,7 @@ export interface EditarMedicoDTO {
   apellido: string;
   especialidad: string;
   correo: string;
+  jornadaMedico: string;
 }
 
 export interface InformacionMedicoDTO {
@@ -28,4 +32,8 @@ export interface InformacionMedicoDTO {
   nombreCompleto: string;
   especialidad: string;
   horarios: ItemHorarioDTO[];
+  correo?: string;
+  jornadaMedico?: string;
 }
+
+

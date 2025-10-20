@@ -15,13 +15,19 @@ import {
   templateUrl: './paciente-form.component.html',
 })
 export class PacienteFormComponent implements OnInit {
-  paciente: CrearPacienteDTO = {
-    nombre: '',
-    apellido: '', // 🔹 siguen existiendo en el modelo pero no se usan
-    correo: '',
-    telefono: '',
-    dni: '',
-  };
+  paciente: CrearPacienteDTO = this.inicializarPaciente();
+
+  // Lista de tipos de sangre
+  tiposRh: string[] = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
+  ];
 
   modoEdicion = false;
   idPaciente?: string;
@@ -32,21 +38,33 @@ export class PacienteFormComponent implements OnInit {
 
   guardar(): void {
     if (this.modoEdicion && this.idPaciente) {
-      const dto: EditarPacienteDTO = { id: this.idPaciente, ...this.paciente };
+      const dto: EditarPacienteDTO = { ...this.paciente };
       this.pacienteService.editar(dto).subscribe(() => alert('✅ Paciente editado'));
     } else {
-      const payload = {
-        nombre: this.paciente.nombre,
-        email: this.paciente.correo, // 👈 coincide con lo que el backend espera
-      };
-
-      this.pacienteService.crear(payload as any).subscribe({
-        next: () => alert('✅ Paciente creado correctamente'),
+      this.pacienteService.crear(this.paciente).subscribe({
+        next: () => {
+          alert('✅ Paciente creado correctamente');
+          this.paciente = this.inicializarPaciente(); // 🔹 Limpia el formulario
+        },
         error: (err) => {
           console.error('❌ Error al crear paciente:', err);
           alert('Error al crear paciente');
         },
       });
     }
+  }
+
+  // 🔹 Método para resetear el objeto paciente
+  private inicializarPaciente(): CrearPacienteDTO {
+    return {
+      id: '',
+      nombre: '',
+      apellido: '',
+      email: '',
+      telefono: '',
+      rh: '',
+      fechaNacimiento: '',
+      direccion: '',
+    };
   }
 }

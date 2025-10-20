@@ -11,20 +11,26 @@ import {
 
 @Component({
   selector: 'app-medico-form',
-  standalone: true, // 👈 CLAVE
-  imports: [CommonModule, FormsModule, RouterLink], // 👈 CLAVE
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './medico-form.component.html',
 })
 export class MedicoFormComponent implements OnInit {
   medico: CrearMedicoDTO = {
+    id: '',
     nombre: '',
     apellido: '',
     especialidad: '',
     correo: '',
+    jornadaMedico: '',
   };
 
   modoEdicion = false;
   idMedico?: string;
+
+
+  jornadas: string[] = ['HORARIO_1', 'HORARIO_2', 'HORARIO_3'];
+  especialidades: string[] = ['GINECOLOGO', 'PEDIATRA', 'DERMATOLOGO', 'CARDIOLOGO', 'GENERAL'];
 
   constructor(
     private route: ActivatedRoute,
@@ -34,17 +40,21 @@ export class MedicoFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.idMedico = this.route.snapshot.paramMap.get('id') || undefined;
+
     if (this.idMedico) {
       this.modoEdicion = true;
 
       this.medicoService.obtenerPorId(this.idMedico).subscribe({
         next: (data: InformacionMedicoDTO) => {
           const [nombre, apellido = ''] = data.nombreCompleto.split(' ');
+
           this.medico = {
+            id: data.id,
             nombre,
             apellido,
             especialidad: data.especialidad,
-            correo: '',
+            correo: data.correo ?? '',
+            jornadaMedico: data.jornadaMedico ?? '',
           };
         },
         error: (err) => console.error('Error cargando médico', err),
@@ -53,9 +63,14 @@ export class MedicoFormComponent implements OnInit {
   }
 
   guardar(): void {
+     console.log('DTO a enviar:', this.medico);
+    if (!this.medico.id?.trim()) {
+      alert('La cédula es obligatoria');
+      return;
+    }
+
     if (this.modoEdicion && this.idMedico) {
       const dto: EditarMedicoDTO = {
-        id: this.idMedico,
         ...this.medico,
       };
 
@@ -64,15 +79,15 @@ export class MedicoFormComponent implements OnInit {
           alert('✅ Médico editado exitosamente');
           this.router.navigate(['/medicos']);
         },
-        error: () => alert('❌ Error al editar médico'),
+        error: () => alert('Error al editar médico'),
       });
     } else {
       this.medicoService.crear(this.medico).subscribe({
         next: () => {
-          alert('✅ Médico creado exitosamente');
+          alert('Médico creado exitosamente');
           this.router.navigate(['/medicos']);
         },
-        error: () => alert('❌ Error al crear médico'),
+        error: () => alert('Error al crear médico'),
       });
     }
   }

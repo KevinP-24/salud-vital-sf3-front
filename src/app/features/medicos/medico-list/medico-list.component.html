@@ -13,6 +13,7 @@
         <th>Apellido</th>
         <th>Especialidad</th>
         <th>Correo</th>
+        <th>Jornada</th> 
       </tr>
     </thead>
     <tbody>
@@ -21,6 +22,7 @@
         <td>{{ m.apellido }}</td>
         <td>{{ m.especialidad }}</td>
         <td>{{ m.correo }}</td>
+        <td>{{ m.jornadaMedico.replace('_', ' ') }}</td>
       </tr>
     </tbody>
   </table>
