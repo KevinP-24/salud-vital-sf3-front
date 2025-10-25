@@ -46,9 +46,7 @@ export class CitaFormComponent implements OnInit {
   /** 🔹 Obtener todos los médicos */
   cargarMedicos(): void {
     this.medicoService.listar().subscribe({
-      next: (data) => {
-        this.todosMedicos = data;
-      },
+      next: (data) => { this.todosMedicos = data; },
       error: (err) => console.error('❌ Error cargando médicos:', err),
     });
   }
@@ -70,14 +68,22 @@ export class CitaFormComponent implements OnInit {
 
   /** 🔹 Enviar cita al backend */
   agendar(): void {
-    if (!this.cita.paciente_id || !this.cita.medico_id || !this.cita.fecha_cita || !this.cita.motivo) {
+    if (
+      !this.cita.paciente_id ||
+      !this.cita.medico_id ||
+      !this.cita.fecha_cita ||
+      !this.cita.motivo
+    ) {
       alert('Por favor completa todos los campos.');
       return;
     }
 
+    // (Opcional) Normaliza a ISO si tu backend lo requiere:
+    // this.cita.fecha_cita = new Date(this.cita.fecha_cita).toISOString();
+
     this.citaService.crear(this.cita).subscribe({
       next: () => {
-        alert('✅ Cita agendada exitosamente');
+        alert('✅ Cita agendada exitosamente.');
         this.router.navigate(['/citas']);
       },
       error: (err) => {

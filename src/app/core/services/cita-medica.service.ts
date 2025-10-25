@@ -1,3 +1,4 @@
+// src/app/core/services/cita-medica.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -34,15 +35,17 @@ export class CitaMedicaService {
     return this.http.get<InformacionCitaDTO>(`${this.apiUrl}/${id}`);
   }
 
-  /** 🔹 Crear nueva cita */
+  /** 🔹 Crear nueva cita
+   *  (el backend enviará el correo automático al crearla)
+   */
   crear(cita: CrearCitaDTO): Observable<ItemCitaDTO> {
     return this.http.post<ItemCitaDTO>(this.apiUrl, cita);
   }
 
-  /** 🔹 Actualizar estado de una cita */
+  /** 🔹 Actualizar estado de una cita (confirmar, cancelar, etc.) */
   actualizarEstado(id: number | string, estado: string): Observable<ItemCitaDTO> {
     const body: EditarCitaEstadoDTO = { estado };
-    return this.http.put<ItemCitaDTO>(`${this.apiUrl}/${id}`, body);
+    return this.http.patch<ItemCitaDTO>(`${this.apiUrl}/${id}/estado`, body);
   }
 
   /** 🔹 Eliminar una cita */
@@ -59,12 +62,14 @@ export class CitaMedicaService {
     return this.http.get<ItemResultadoDTO[]>(this.resultadosUrl);
   }
 
-  /** 🔹 Obtener resultados de una cita */
+  /** 🔹 Obtener resultados de una cita específica */
   obtenerResultadoPorCita(citaId: number | string): Observable<ItemResultadoDTO[]> {
-    return this.http.get<ItemResultadoDTO[]>(`${this.resultadosUrl}/${citaId}`);
+    return this.http.get<ItemResultadoDTO[]>(`${this.resultadosUrl}/cita/${citaId}`);
   }
 
-  /** 🔹 Crear nuevo resultado médico */
+  /** 🔹 Crear nuevo resultado médico
+   *  (el backend enviará el correo automático al crear el resultado)
+   */
   crearResultado(dto: CrearResultadoDTO): Observable<ItemResultadoDTO> {
     return this.http.post<ItemResultadoDTO>(this.resultadosUrl, dto);
   }
