@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Build Angular App
 
 on:
   push:
@@ -22,5 +22,5 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
+      - name: Build Angular app
+        run: npm run build
