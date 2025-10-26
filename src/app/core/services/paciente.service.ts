@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
+import {
+  ItemPacienteDTO,
+  CrearPacienteDTO,
+  EditarPacienteDTO,
+  InformacionPacienteDTO
+} from '../models/paciente.model';
 import { environment } from '../../../environments/environment';
-import { ItemPacienteDTO, CrearPacienteDTO, EditarPacienteDTO } from '../models/paciente.model';
-
-interface MensajeDTO<T> {
-  error: boolean;
-  respuesta: T;
-}
 
 @Injectable({ providedIn: 'root' })
 export class PacienteService {
@@ -15,33 +15,28 @@ export class PacienteService {
 
   constructor(private http: HttpClient) {}
 
+  /** 🔹 Obtener todos los pacientes */
   listar(): Observable<ItemPacienteDTO[]> {
-    return this.http
-      .get<MensajeDTO<ItemPacienteDTO[]>>(`${this.apiUrl}/listar-todo`)
-      .pipe(map((res) => res.respuesta));
+    return this.http.get<ItemPacienteDTO[]>(this.apiUrl);
   }
 
-  obtenerPorId(id: string): Observable<ItemPacienteDTO> {
-    return this.http
-      .get<MensajeDTO<ItemPacienteDTO>>(`${this.apiUrl}/obtener/${id}`)
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Obtener un paciente por ID */
+  obtenerPorId(id: number | string): Observable<InformacionPacienteDTO> {
+    return this.http.get<InformacionPacienteDTO>(`${this.apiUrl}/${id}`);
   }
 
-  crear(paciente: CrearPacienteDTO): Observable<string> {
-    return this.http
-      .post<MensajeDTO<string>>(`${this.apiUrl}/crear`, paciente)
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Crear un nuevo paciente */
+  crear(paciente: CrearPacienteDTO): Observable<any> {
+    return this.http.post(this.apiUrl, paciente);
   }
 
-  editar(paciente: EditarPacienteDTO): Observable<string> {
-    return this.http
-      .put<MensajeDTO<string>>(`${this.apiUrl}/editar`, paciente)
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Editar un paciente existente */
+  editar(id: number | string, paciente: EditarPacienteDTO): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, paciente);
   }
 
-  eliminar(id: string): Observable<string> {
-    return this.http
-      .delete<MensajeDTO<string>>(`${this.apiUrl}/eliminar/${id}`)
-      .pipe(map((res) => res.respuesta));
+  /** 🔹 Eliminar un paciente */
+  eliminar(id: number | string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

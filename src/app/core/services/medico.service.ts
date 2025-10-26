@@ -1,19 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 import {
   ItemMedicoDTO,
   CrearMedicoDTO,
   EditarMedicoDTO,
   InformacionMedicoDTO
 } from '../models/medico.model';
-import { ItemHorarioDTO, CrearHorarioDTO } from '../models/horario.model';
-
-interface MensajeDTO<T> {
-  error: boolean;
-  respuesta: T;
-}
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class MedicoService {
@@ -21,46 +15,28 @@ export class MedicoService {
 
   constructor(private http: HttpClient) {}
 
+  /** Listar todos los médicos */
   listar(): Observable<ItemMedicoDTO[]> {
-    return this.http
-      .get<MensajeDTO<ItemMedicoDTO[]>>(`${this.apiUrl}/listar-todo`)
-      .pipe(map((res) => res.respuesta));
+    return this.http.get<ItemMedicoDTO[]>(this.apiUrl);
   }
 
-  obtenerPorId(id: string): Observable<InformacionMedicoDTO> {
-    return this.http
-      .get<MensajeDTO<InformacionMedicoDTO>>(`${this.apiUrl}/obtener/${id}`)
-      .pipe(map((res) => res.respuesta));
+  /** Obtener un médico por ID */
+  obtenerPorId(id: number | string): Observable<InformacionMedicoDTO> {
+    return this.http.get<InformacionMedicoDTO>(`${this.apiUrl}/${id}`);
   }
 
-  crear(medico: CrearMedicoDTO): Observable<string> {
-    return this.http
-      .post<MensajeDTO<string>>(`${this.apiUrl}/crear`, medico)
-      .pipe(map((res) => res.respuesta));
+  /** Crear un nuevo médico */
+  crear(medico: CrearMedicoDTO): Observable<any> {
+    return this.http.post(this.apiUrl, medico);
   }
 
-  editar(medico: EditarMedicoDTO): Observable<string> {
-    return this.http
-      .put<MensajeDTO<string>>(`${this.apiUrl}/editar`, medico)
-      .pipe(map((res) => res.respuesta));
+  /** Editar un médico existente (si agregas PUT en el backend más adelante) */
+  editar(id: number | string, medico: EditarMedicoDTO): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, medico);
   }
 
-  eliminar(id: string): Observable<string> {
-    return this.http
-      .delete<MensajeDTO<string>>(`${this.apiUrl}/eliminar/${id}`)
-      .pipe(map((res) => res.respuesta));
-  }
-
-  // ----- Horarios -----
-  agregarHorario(idMedico: string, dto: CrearHorarioDTO): Observable<string> {
-    return this.http
-      .post<MensajeDTO<string>>(`${this.apiUrl}/horario/agregar/${idMedico}`, dto)
-      .pipe(map((res) => res.respuesta));
-  }
-
-  listarHorarios(idMedico: string): Observable<ItemHorarioDTO[]> {
-    return this.http
-      .get<MensajeDTO<ItemHorarioDTO[]>>(`${this.apiUrl}/horarios/${idMedico}`)
-      .pipe(map((res) => res.respuesta));
+  /** Eliminar un médico */
+  eliminar(id: number | string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms'; // ✅ necesario para ngModel y ngForm
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { PacienteService } from '../../../../app/core/services/paciente.service';
-import {
-  CrearPacienteDTO,
-  EditarPacienteDTO,
-} from '../../../../app/core/models/paciente.model';
+import { CrearPacienteDTO, EditarPacienteDTO } from '../../../../app/core/models/paciente.model';
 
 @Component({
   selector: 'app-paciente-form',
@@ -15,56 +12,83 @@ import {
   templateUrl: './paciente-form.component.html',
 })
 export class PacienteFormComponent implements OnInit {
-  paciente: CrearPacienteDTO = this.inicializarPaciente();
+  pacienteId?: number;
+  modoEdicion = false; // ✅ ahora existe
+  cargando = false;
 
-  // Lista de tipos de sangre
-  tiposRh: string[] = [
-    'A+',
-    'A-',
-    'B+',
-    'B-',
-    'AB+',
-    'AB-',
-    'O+',
-    'O-',
-  ];
+  // ✅ Objeto que usa ngModel en el HTML
+  paciente: CrearPacienteDTO = {
+    usuario_id: 0,
+    documento: '',
+    telefono: '',
+    direccion: '',
+    fecha_nacimiento: '',
+    genero: 'M',
+  };
 
-  modoEdicion = false;
-  idPaciente?: string;
+  constructor(
+    private pacienteService: PacienteService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-  constructor(private pacienteService: PacienteService) {}
+  ngOnInit(): void {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      this.pacienteId = Number(idParam);
+      this.modoEdicion = true;
+      this.cargarPaciente();
+    }
+  }
 
-  ngOnInit(): void {}
+  cargarPaciente(): void {
+    if (!this.pacienteId) return;
+    this.cargando = true;
+
+    this.pacienteService.obtenerPorId(this.pacienteId).subscribe({
+      next: (data) => {
+        this.paciente = data;
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar paciente:', err);
+        this.cargando = false;
+      },
+    });
+  }
 
   guardar(): void {
-    if (this.modoEdicion && this.idPaciente) {
-      const dto: EditarPacienteDTO = { ...this.paciente };
-      this.pacienteService.editar(dto).subscribe(() => alert('✅ Paciente editado'));
+    this.cargando = true;
+
+    if (this.modoEdicion && this.pacienteId) {
+      const dto: EditarPacienteDTO = {
+        telefono: this.paciente.telefono,
+        direccion: this.paciente.direccion,
+        fecha_nacimiento: this.paciente.fecha_nacimiento,
+        genero: this.paciente.genero,
+      };
+
+      this.pacienteService.editar(this.pacienteId, dto).subscribe({
+        next: () => {
+          alert('✅ Paciente actualizado correctamente');
+          this.router.navigate(['/pacientes']);
+        },
+        error: (err) => {
+          console.error('❌ Error al actualizar paciente:', err);
+          this.cargando = false;
+        },
+      });
     } else {
       this.pacienteService.crear(this.paciente).subscribe({
         next: () => {
           alert('✅ Paciente creado correctamente');
-          this.paciente = this.inicializarPaciente(); // 🔹 Limpia el formulario
+          this.router.navigate(['/pacientes']);
         },
         error: (err) => {
           console.error('❌ Error al crear paciente:', err);
-          alert('Error al crear paciente');
+          this.cargando = false;
         },
       });
     }
-  }
-
-  // 🔹 Método para resetear el objeto paciente
-  private inicializarPaciente(): CrearPacienteDTO {
-    return {
-      id: '',
-      nombre: '',
-      apellido: '',
-      email: '',
-      telefono: '',
-      rh: '',
-      fechaNacimiento: '',
-      direccion: '',
-    };
   }
 }

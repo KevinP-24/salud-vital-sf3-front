@@ -20,22 +20,31 @@ export class PacienteListComponent implements OnInit {
     this.cargarPacientes();
   }
 
+  /** 🔹 Obtener todos los pacientes */
   cargarPacientes(): void {
+    this.cargando = true;
     this.pacienteService.listar().subscribe({
       next: (data) => {
         this.pacientes = data;
         this.cargando = false;
       },
       error: (err) => {
-        console.error('Error cargando pacientes', err);
+        console.error('❌ Error cargando pacientes:', err);
         this.cargando = false;
       },
     });
   }
 
-  eliminar(id: string): void {
+  /** 🔹 Eliminar un paciente */
+  eliminar(id: number | string): void {
     if (confirm('¿Deseas eliminar este paciente?')) {
-      this.pacienteService.eliminar(id).subscribe(() => this.cargarPacientes());
+      this.pacienteService.eliminar(id).subscribe({
+        next: () => {
+          alert('✅ Paciente eliminado correctamente');
+          this.cargarPacientes();
+        },
+        error: (err) => console.error('❌ Error al eliminar paciente:', err),
+      });
     }
   }
 }
