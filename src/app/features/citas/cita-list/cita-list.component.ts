@@ -37,24 +37,31 @@ export class CitaListComponent implements OnInit {
 
   /** 🔹 Eliminar una cita */
   eliminarCita(id: number | string): void {
-    if (confirm('¿Seguro que deseas eliminar esta cita?')) {
-      this.citaService.eliminar(id).subscribe({
-        next: () => {
-          alert('✅ Cita eliminada correctamente');
-          this.cargarCitas();
-        },
-        error: (err) => {
-          console.error('❌ Error al eliminar cita:', err);
-        },
-      });
-    }
+    if (!confirm('¿Seguro que deseas eliminar esta cita?')) return;
+
+    this.citaService.eliminar(id).subscribe({
+      next: () => {
+        alert('✅ Cita eliminada correctamente');
+        this.cargarCitas();
+      },
+      error: (err) => {
+        console.error('❌ Error al eliminar cita:', err);
+        alert('Error al eliminar la cita');
+      },
+    });
   }
 
-  /** 🔹 Cambiar estado de una cita (opcional) */
+  /** 🔹 Cambiar estado de una cita (confirmar / cancelar, etc.) */
   actualizarEstado(id: number | string, nuevoEstado: string): void {
     this.citaService.actualizarEstado(id, nuevoEstado).subscribe({
-      next: () => this.cargarCitas(),
-      error: (err) => console.error('❌ Error al actualizar estado:', err),
+      next: () => {
+        alert('✅ Estado actualizado correctamente');
+        this.cargarCitas();
+      },
+      error: (err) => {
+        console.error('❌ Error al actualizar estado:', err);
+        alert('Error al actualizar el estado de la cita');
+      },
     });
   }
 }
